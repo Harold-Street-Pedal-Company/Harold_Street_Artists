@@ -1,58 +1,708 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Harold Street Players</title>
-<style>
-body{
-font-family: Arial, sans-serif;
-margin:40px;
-background:#ffffff;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harold Street Players</title>
+  <style>
+    :root{
+      --bg:#f5f5f2;
+      --panel:#ffffff;
+      --text:#121212;
+      --muted:#666;
+      --line:#d8d8d2;
+      --accent:#111;
+      --accent-inverse:#fff;
+      --shadow:0 8px 24px rgba(0,0,0,0.08);
+      --radius:18px;
+      --radius-sm:12px;
+      --maxw:1200px;
+    }
 
-.grid{
-display:flex;
-flex-wrap:wrap;
-gap:40px;
-}
+    *{
+      box-sizing:border-box;
+    }
 
-.artist{
-width:260px;
-}
+    html{
+      scroll-behavior:smooth;
+    }
 
-.artist img{
-width:100%;
-}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
 
-h2{
-margin-top:0;
-}
-</style>
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    img{
+      display:block;
+      max-width:100%;
+      height:auto;
+    }
+
+    .wrap{
+      max-width:var(--maxw);
+      margin:0 auto;
+      padding:28px 20px 48px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg, #ffffff 0%, #efefea 100%);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-bottom:28px;
+    }
+
+    .hero-inner{
+      display:grid;
+      grid-template-columns:1.2fr 0.8fr;
+      gap:24px;
+      padding:28px;
+      align-items:center;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:1.3px;
+      text-transform:uppercase;
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      margin-bottom:14px;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size:clamp(2rem, 4vw, 4rem);
+      line-height:0.95;
+      letter-spacing:-1px;
+      text-transform:uppercase;
+    }
+
+    .hero p{
+      margin:0;
+      max-width:62ch;
+      color:#333;
+      font-size:1rem;
+    }
+
+    .hero-side{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      min-height:104px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .stat-num{
+      font-size:2rem;
+      font-weight:700;
+      line-height:1;
+    }
+
+    .stat-label{
+      color:var(--muted);
+      font-size:0.92rem;
+    }
+
+    .controls{
+      position:sticky;
+      top:0;
+      z-index:20;
+      margin-bottom:22px;
+      padding-top:8px;
+      background:
+        linear-gradient(to bottom, rgba(245,245,242,0.98), rgba(245,245,242,0.98));
+      backdrop-filter:blur(4px);
+    }
+
+    .controls-inner{
+      display:grid;
+      grid-template-columns:1.2fr 1fr auto;
+      gap:12px;
+      align-items:center;
+      background:rgba(255,255,255,0.92);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:12px;
+    }
+
+    .search{
+      position:relative;
+    }
+
+    .search input,
+    .filter select{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:14px 14px;
+      font-size:15px;
+      color:var(--text);
+      outline:none;
+    }
+
+    .search input:focus,
+    .filter select:focus{
+      border-color:#999;
+    }
+
+    .results-count{
+      text-align:right;
+      font-size:14px;
+      color:var(--muted);
+      white-space:nowrap;
+      padding-right:4px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:0 3px 10px rgba(0,0,0,0.04);
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 12px 30px rgba(0,0,0,0.10);
+      border-color:#bbb;
+    }
+
+    .card-media{
+      aspect-ratio:1 / 1;
+      overflow:hidden;
+      background:#ddd;
+      border-bottom:1px solid var(--line);
+      position:relative;
+    }
+
+    .card-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:transform 0.35s ease;
+    }
+
+    .card:hover .card-media img{
+      transform:scale(1.04);
+    }
+
+    .card-badge{
+      position:absolute;
+      left:12px;
+      top:12px;
+      background:rgba(255,255,255,0.94);
+      border:1px solid rgba(0,0,0,0.08);
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:0.8px;
+      text-transform:uppercase;
+      padding:7px 10px;
+    }
+
+    .card-body{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .artist-name{
+      margin:0;
+      font-size:1.28rem;
+      line-height:1.05;
+      text-transform:uppercase;
+      letter-spacing:-0.3px;
+    }
+
+    .artist-meta{
+      color:var(--muted);
+      font-size:0.95rem;
+      margin-top:-2px;
+    }
+
+    .artist-blurb{
+      font-size:0.97rem;
+      color:#222;
+    }
+
+    .tag-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      line-height:1;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fafafa;
+      color:#333;
+    }
+
+    .card-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:2px;
+    }
+
+    .btn,
+    .link-btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      font:inherit;
+      border-radius:12px;
+      padding:11px 13px;
+      transition:all 0.16s ease;
+    }
+
+    .btn{
+      background:var(--accent);
+      color:var(--accent-inverse);
+      font-weight:700;
+    }
+
+    .btn:hover{
+      opacity:0.92;
+    }
+
+    .link-btn{
+      background:#f1f1ed;
+      color:#111;
+      border:1px solid var(--line);
+      font-weight:700;
+    }
+
+    .link-btn:hover{
+      background:#ecece7;
+    }
+
+    .details{
+      display:none;
+      margin-top:10px;
+      padding-top:14px;
+      border-top:1px solid var(--line);
+      gap:12px;
+    }
+
+    .card.open .details{
+      display:grid;
+    }
+
+    .details h4{
+      margin:0 0 4px;
+      font-size:0.95rem;
+      text-transform:uppercase;
+      letter-spacing:0.6px;
+    }
+
+    .quote{
+      padding:12px 14px;
+      background:#f7f7f4;
+      border-left:4px solid #222;
+      border-radius:8px;
+      color:#222;
+      font-style:italic;
+    }
+
+    .socials{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .socials a{
+      display:inline-block;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      font-size:13px;
+      background:#fff;
+    }
+
+    .socials a:hover{
+      background:#f3f3ef;
+    }
+
+    .empty{
+      display:none;
+      text-align:center;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:40px 20px;
+      color:var(--muted);
+      box-shadow:var(--shadow);
+    }
+
+    .footer-note{
+      margin-top:28px;
+      color:var(--muted);
+      font-size:0.92rem;
+      text-align:center;
+    }
+
+    @media (max-width: 980px){
+      .hero-inner{
+        grid-template-columns:1fr;
+      }
+
+      .controls-inner{
+        grid-template-columns:1fr;
+      }
+
+      .results-count{
+        text-align:left;
+      }
+
+      .grid{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px){
+      .wrap{
+        padding:16px 14px 36px;
+      }
+
+      .hero-inner{
+        padding:18px;
+      }
+
+      .hero-side{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .card-body{
+        padding:15px;
+      }
+
+      h1{
+        font-size:2.25rem;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow">Harold Street Team</div>
+          <h1>Harold Street Players</h1>
+          <p>
+            Artists and bands using Harold Street Pedals in studios, basements,
+            rehearsal spaces, and live rigs. Real players. Real boards. Real noise.
+          </p>
+        </div>
 
-<h1>Harold Street Players</h1>
+        <div class="hero-side">
+          <div class="stat">
+            <div class="stat-num" id="artistCount">0</div>
+            <div class="stat-label">Featured artists</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="pedalCount">0</div>
+            <div class="stat-label">Pedals represented</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">Local</div>
+            <div class="stat-label">Hamilton-rooted boutique builds</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">Live</div>
+            <div class="stat-label">Embedded directly inside your store</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="grid">
+    <section class="controls">
+      <div class="controls-inner">
+        <div class="search">
+          <input id="searchInput" type="text" placeholder="Search artist, band, city, style, or pedal..." />
+        </div>
 
-<div class="artist">
-<img src="artist1.jpg">
-<h3>Artist Name</h3>
-<p><b>Band / Project</b><br>Hamilton, Canada</p>
-<p>Short bio about the artist.</p>
-<p><b>Uses:</b><br>Scavenger</p>
-</div>
+        <div class="filter">
+          <select id="pedalFilter">
+            <option value="all">All pedals</option>
+          </select>
+        </div>
 
-<div class="artist">
-<img src="artist2.jpg">
-<h3>Artist Name</h3>
-<p><b>Band / Project</b><br>Toronto, Canada</p>
-<p>Short bio about the artist.</p>
-<p><b>Uses:</b><br>Skulptër</p>
-</div>
+        <div class="results-count">
+          <span id="visibleCount">0</span> visible
+        </div>
+      </div>
+    </section>
 
-</div>
+    <section class="grid" id="artistGrid"></section>
 
+    <section class="empty" id="emptyState">
+      <h3>No matches found</h3>
+      <p>Try a different artist name, city, or pedal filter.</p>
+    </section>
+
+    <div class="footer-note">
+      Harold Street Pedals artist roster. Updated through GitHub Pages, displayed in Big Cartel.
+    </div>
+  </div>
+
+  <script>
+    const artists = [
+      {
+        name: "Artist Name",
+        band: "Band / Project",
+        city: "Hamilton, Ontario",
+        category: "Indie / Noise Rock",
+        image: "images/artist1.jpg",
+        featured: true,
+        blurb: "Short bio here. This artist uses Harold Street gear for gritty rhythm work, lead textures, and big mid-forward sounds.",
+        pedals: ["Scavenger", "Skulptër"],
+        quote: "The pedal feels alive under the fingers and sits exactly where I want it in a band mix.",
+        links: {
+          instagram: "#",
+          bandcamp: "#",
+          spotify: "#",
+          youtube: "#"
+        }
+      },
+      {
+        name: "Second Artist",
+        band: "Another Project",
+        city: "Toronto, Ontario",
+        category: "Garage / Punk",
+        image: "images/artist2.jpg",
+        featured: false,
+        blurb: "Another short bio. Keep it to two or three sentences and focus on what makes the artist distinct.",
+        pedals: ["Crazy Gain Distortion"],
+        quote: "Cuts without getting thin. It sounds mean in the right way.",
+        links: {
+          instagram: "#",
+          bandcamp: "#",
+          spotify: "#"
+        }
+      },
+      {
+        name: "Third Artist",
+        band: "Solo / Session",
+        city: "Burlington, Ontario",
+        category: "Psych / Experimental",
+        image: "images/artist3.jpg",
+        featured: true,
+        blurb: "This slot is ready for another player. Add a real image, a short quote, and the pedals they are actually using.",
+        pedals: ["Scavenger", "Crazy Gain Distortion"],
+        quote: "Harold Street pedals do not feel generic. They react like instruments.",
+        links: {
+          instagram: "#",
+          youtube: "#"
+        }
+      }
+    ];
+
+    const grid = document.getElementById("artistGrid");
+    const searchInput = document.getElementById("searchInput");
+    const pedalFilter = document.getElementById("pedalFilter");
+    const visibleCount = document.getElementById("visibleCount");
+    const emptyState = document.getElementById("emptyState");
+    const artistCount = document.getElementById("artistCount");
+    const pedalCount = document.getElementById("pedalCount");
+
+    function uniquePedals(data){
+      return [...new Set(data.flatMap(a => a.pedals))].sort((a,b) => a.localeCompare(b));
+    }
+
+    function buildFilterOptions(){
+      const pedals = uniquePedals(artists);
+      pedalCount.textContent = pedals.length;
+      artistCount.textContent = artists.length;
+
+      pedals.forEach(pedal => {
+        const option = document.createElement("option");
+        option.value = pedal.toLowerCase();
+        option.textContent = pedal;
+        pedalFilter.appendChild(option);
+      });
+    }
+
+    function socialLinksHTML(links){
+      const entries = Object.entries(links || {}).filter(([,url]) => url && url !== "#");
+      if (!entries.length) return "";
+
+      return `
+        <div class="socials">
+          ${entries.map(([label, url]) => `
+            <a href="${url}" target="_blank" rel="noopener noreferrer">${capitalize(label)}</a>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function pedalTagsHTML(pedals){
+      return `
+        <div class="tag-row">
+          ${pedals.map(pedal => `<span class="tag">${pedal}</span>`).join("")}
+        </div>
+      `;
+    }
+
+    function renderCards(data){
+      grid.innerHTML = data.map((artist, index) => `
+        <article class="card" data-search="${buildSearchBlob(artist)}" data-pedals="${artist.pedals.map(p => p.toLowerCase()).join("|")}">
+          <div class="card-media">
+            <img src="${artist.image}" alt="${artist.name}" loading="lazy">
+            <div class="card-badge">${artist.featured ? "Featured" : "Artist"}</div>
+          </div>
+
+          <div class="card-body">
+            <div>
+              <h2 class="artist-name">${artist.name}</h2>
+              <div class="artist-meta">${artist.band} · ${artist.city}</div>
+            </div>
+
+            <div class="artist-blurb">${artist.blurb}</div>
+
+            ${pedalTagsHTML(artist.pedals)}
+
+            <div class="card-actions">
+              <button class="btn" type="button" data-index="${index}">More</button>
+            </div>
+
+            <div class="details" id="details-${index}">
+              <div>
+                <h4>Style</h4>
+                <div>${artist.category}</div>
+              </div>
+
+              <div>
+                <h4>Pedals Used</h4>
+                ${pedalTagsHTML(artist.pedals)}
+              </div>
+
+              ${artist.quote ? `
+                <div>
+                  <h4>Artist Quote</h4>
+                  <div class="quote">"${artist.quote}"</div>
+                </div>
+              ` : ""}
+
+              ${socialLinksHTML(artist.links)}
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      bindToggleButtons();
+      updateVisibleCount();
+      emptyState.style.display = data.length ? "none" : "block";
+    }
+
+    function buildSearchBlob(artist){
+      return [
+        artist.name,
+        artist.band,
+        artist.city,
+        artist.category,
+        artist.blurb,
+        ...(artist.pedals || [])
+      ].join(" ").toLowerCase();
+    }
+
+    function capitalize(str){
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function bindToggleButtons(){
+      const buttons = document.querySelectorAll(".btn[data-index]");
+      buttons.forEach(button => {
+        button.addEventListener("click", () => {
+          const card = button.closest(".card");
+          const isOpen = card.classList.toggle("open");
+          button.textContent = isOpen ? "Less" : "More";
+        });
+      });
+    }
+
+    function applyFilters(){
+      const query = searchInput.value.trim().toLowerCase();
+      const pedalValue = pedalFilter.value;
+      const cards = [...document.querySelectorAll(".card")];
+
+      let shown = 0;
+
+      cards.forEach(card => {
+        const searchBlob = card.dataset.search || "";
+        const pedals = card.dataset.pedals || "";
+
+        const matchesSearch = !query || searchBlob.includes(query);
+        const matchesPedal = pedalValue === "all" || pedals.includes(pedalValue);
+
+        const show = matchesSearch && matchesPedal;
+        card.style.display = show ? "" : "none";
+        if(show) shown++;
+      });
+
+      visibleCount.textContent = shown;
+      emptyState.style.display = shown ? "none" : "block";
+    }
+
+    function updateVisibleCount(){
+      const cards = [...document.querySelectorAll(".card")];
+      const shown = cards.filter(card => card.style.display !== "none").length;
+      visibleCount.textContent = shown;
+    }
+
+    buildFilterOptions();
+    renderCards(artists);
+
+    searchInput.addEventListener("input", applyFilters);
+    pedalFilter.addEventListener("change", applyFilters);
+  </script>
 </body>
 </html>
