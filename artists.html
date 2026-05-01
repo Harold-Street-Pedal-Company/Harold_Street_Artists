@@ -18,7 +18,9 @@
 --radius:18px;
 }
 
-*{box-sizing:border-box;}
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
@@ -38,6 +40,7 @@ padding:14px 10px 40px;
 }
 
 /* HERO */
+
 .hero{
 background:linear-gradient(135deg,#ffffff 0%,#efefea 100%);
 border:1px solid var(--line);
@@ -107,6 +110,7 @@ color:var(--muted);
 }
 
 /* SEARCH BAR */
+
 .controls{
 margin-bottom:16px;
 }
@@ -137,6 +141,7 @@ align-self:center;
 }
 
 /* GRID */
+
 .grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -144,6 +149,7 @@ gap:18px;
 }
 
 /* CARD */
+
 .card{
 background:#fff;
 border:1px solid var(--line);
@@ -164,12 +170,67 @@ aspect-ratio:1/1;
 overflow:hidden;
 border-bottom:1px solid var(--line);
 background:#eeeeea;
+position:relative;
 }
 
 .card-media img{
 width:100%;
 height:100%;
 object-fit:cover;
+}
+
+/* SLIDESHOW */
+
+.slide{
+display:none;
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.slide.active{
+display:block;
+}
+
+.slide-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:34px;
+height:34px;
+border:0;
+border-radius:999px;
+background:rgba(0,0,0,.6);
+color:#fff;
+font-size:24px;
+line-height:1;
+cursor:pointer;
+z-index:2;
+}
+
+.slide-btn:hover{
+background:rgba(0,0,0,.85);
+}
+
+.slide-btn.prev{
+left:10px;
+}
+
+.slide-btn.next{
+right:10px;
+}
+
+.card-media.image-error::before{
+content:"Image not found";
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:.9rem;
+color:var(--muted);
+padding:16px;
+text-align:center;
 }
 
 .card-body{
@@ -278,6 +339,7 @@ color:#fff;
 }
 
 /* MOBILE */
+
 @media(max-width:900px){
 .hero-inner{
 grid-template-columns:1fr;
@@ -333,6 +395,7 @@ grid-template-columns:1fr;
 
 <section class="controls">
 <div class="controls-inner">
+
 <div class="search">
 <input id="searchInput" placeholder="Search artist, band, city, genre or pedal">
 </div>
@@ -346,6 +409,7 @@ grid-template-columns:1fr;
 <div class="results-count">
 <span id="visibleCount">0</span> visible
 </div>
+
 </div>
 </section>
 
@@ -360,13 +424,37 @@ name: "Sugar Report",
 band: "Sugar Report",
 city: "Hamilton",
 category: "Rock and Roll, Alternative Rock, Punk Rock",
-image: "https://harold-street-pedal-company.github.io/Harold_Street_Artists/sugarreport.png",
+
+/*
+Upload your image files to the same GitHub repo folder as artists.html.
+
+Use paths like this:
+"sugarreport.png"
+"sugarreport2.png"
+"sugarreport3.png"
+
+Do not use github.com/.../blob/main/image.png
+*/
+
+images: [
+"sugarreport.png"
+
+/*
+Add more when uploaded:
+"sugarreport2.png",
+"sugarreport3.png"
+*/
+],
+
 blurb: [
 "Formed in the heart of Hamilton, Ontario, Sugar Report quickly established themselves in the local scene by creating songs that offer a view of the world around them. Their music is an honest and unflinching exploration of the human experience: the struggles, the triumphs, and the mundane moments in between. The band transforms raw, personal vulnerability into relatable, sing-along anthems, ensuring that every melody and lyric resonates deeply with the audience. Sugar Report released their debut single, \"All In My Head,\" in June 2025 and are currently gearing up for the release of their debut EP in Spring 2026. With a focus on authentic performance and genuine connection, Sugar Report is ready to bring the next wave of powerful, heartfelt rock to the festival stage.",
 "Sugar Report captures the raw emotion and intricate storytelling of everyday life. Their sound is a dynamic collision of driving, melodic pop-punk reminiscent of The Wonder Years and Red City Radio, infused with the lyrical depth and conversational intimacy of bands like Modern Baseball and The Front Bottoms. The band pivots effortlessly between explosive, anthemic rock and quieter, folk-tinged acoustic moments, drawing heavily on the narrative-driven style found in projects like Aaron West and the Roaring Twenties. Audiences should expect intricate, catchy melodies set against high-energy, guitar-driven urgency."
 ],
+
 pedals: ["Sugar Rush", "1992", "Cosmotone", "Doug Ford Hates You"],
+
 quote: "Working with HSP pedals was such an easy and organic way to help us find the tones we have been hearing in our heads, and bringing them to life on the stage. Trusty, reliable, and friendly service, working with HSP is like having a 5th member of the band.",
+
 links: {
 instagram: "https://www.instagram.com/sugarreport416?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
 spotify: "https://open.spotify.com/track/6vaOhx6yELETinPlsMp7X7?utm_medium=share&utm_source=linktree",
@@ -386,11 +474,11 @@ const pedalCount = document.getElementById("pedalCount");
 
 function escapeHtml(value){
 return String(value)
-.replaceAll("&", "&amp;")
-.replaceAll("<", "&lt;")
-.replaceAll(">", "&gt;")
-.replaceAll('"', "&quot;")
-.replaceAll("'", "&#039;");
+.replace(/&/g, "&amp;")
+.replace(/</g, "&lt;")
+.replace(/>/g, "&gt;")
+.replace(/"/g, "&quot;")
+.replace(/'/g, "&#039;");
 }
 
 function uniquePedals(data){
@@ -399,6 +487,7 @@ return [...new Set(data.flatMap(a => a.pedals))];
 
 function buildFilter(){
 const pedals = uniquePedals(artists);
+
 pedalCount.textContent = pedals.length;
 artistCount.textContent = artists.length;
 
@@ -412,7 +501,9 @@ pedalFilter.appendChild(opt);
 
 function render(){
 grid.innerHTML = artists.map((artist, i) => {
+const images = Array.isArray(artist.images) && artist.images.length ? artist.images : [];
 const blurbHtml = artist.blurb.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("");
+
 const searchText = [
 artist.name,
 artist.band,
@@ -422,17 +513,36 @@ artist.blurb.join(" "),
 artist.pedals.join(" ")
 ].join(" ").toLowerCase();
 
+const slideshowHtml = images.map((img, index) => `
+<img
+src="${escapeHtml(img)}"
+alt="${escapeHtml(artist.name)} photo ${index + 1}"
+class="slide ${index === 0 ? "active" : ""}"
+loading="lazy"
+onerror="this.closest('.card-media').classList.add('image-error'); this.remove();">
+`).join("");
+
+const slideshowButtons = images.length > 1 ? `
+<button class="slide-btn prev" type="button" data-prev="${i}" aria-label="Previous image">‹</button>
+<button class="slide-btn next" type="button" data-next="${i}" aria-label="Next image">›</button>
+` : "";
+
 return `
 <article class="card" data-search="${escapeHtml(searchText)}" data-pedals="${escapeHtml(artist.pedals.join("|").toLowerCase())}">
-<div class="card-media">
-<img src="${escapeHtml(artist.image)}" alt="${escapeHtml(artist.name)}" loading="lazy">
+
+<div class="card-media slideshow" data-slide="${i}">
+${slideshowHtml}
+${slideshowButtons}
 </div>
 
 <div class="card-body">
 <h2 class="artist-name">${escapeHtml(artist.name)}</h2>
 <div class="artist-meta">${escapeHtml(artist.band)} · ${escapeHtml(artist.city)}</div>
 <div class="artist-category">${escapeHtml(artist.category)}</div>
-<div class="artist-blurb">${blurbHtml}</div>
+
+<div class="artist-blurb">
+${blurbHtml}
+</div>
 
 <div class="tag-row">
 ${artist.pedals.map(p => `<span class="tag">${escapeHtml(p)}</span>`).join("")}
@@ -447,6 +557,7 @@ ${artist.pedals.map(p => `<span class="tag">${escapeHtml(p)}</span>`).join("")}
 ${Object.entries(artist.links).map(([k, v]) => `<a href="${escapeHtml(v)}" target="_blank" rel="noopener noreferrer">${escapeHtml(k)}</a>`).join("")}
 </div>
 </div>
+
 </div>
 </article>`;
 }).join("");
@@ -457,8 +568,24 @@ updateCount();
 function toggleCard(button){
 const card = button.closest(".card");
 const isOpen = card.classList.toggle("open");
+
 button.textContent = isOpen ? "Less" : "More";
 button.setAttribute("aria-expanded", String(isOpen));
+}
+
+function changeSlide(index, direction){
+const slideshow = document.querySelector(`.slideshow[data-slide="${index}"]`);
+if(!slideshow) return;
+
+const slides = [...slideshow.querySelectorAll(".slide")];
+if(slides.length <= 1) return;
+
+const currentIndex = slides.findIndex(slide => slide.classList.contains("active"));
+const safeCurrentIndex = currentIndex >= 0 ? currentIndex : 0;
+const nextIndex = (safeCurrentIndex + direction + slides.length) % slides.length;
+
+slides[safeCurrentIndex].classList.remove("active");
+slides[nextIndex].classList.add("active");
 }
 
 function filter(){
@@ -469,10 +596,13 @@ let shown = 0;
 document.querySelectorAll(".card").forEach(c => {
 const search = c.dataset.search;
 const pedals = c.dataset.pedals;
+
 const okSearch = !q || search.includes(q);
 const okPedal = pedal === "all" || pedals.includes(pedal);
 const show = okSearch && okPedal;
+
 c.style.display = show ? "" : "none";
+
 if(show) shown++;
 });
 
@@ -488,9 +618,25 @@ render();
 
 searchInput.addEventListener("input", filter);
 pedalFilter.addEventListener("change", filter);
+
 grid.addEventListener("click", event => {
+const prev = event.target.closest("button[data-prev]");
+const next = event.target.closest("button[data-next]");
 const button = event.target.closest("button[data-toggle]");
-if(button) toggleCard(button);
+
+if(prev){
+changeSlide(prev.dataset.prev, -1);
+return;
+}
+
+if(next){
+changeSlide(next.dataset.next, 1);
+return;
+}
+
+if(button){
+toggleCard(button);
+}
 });
 </script>
 </body>
