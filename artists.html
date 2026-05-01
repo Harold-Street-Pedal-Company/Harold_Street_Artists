@@ -6,7 +6,6 @@
 <title>Harold Street Players</title>
 
 <style>
-
 :root{
 --bg:#f5f5f2;
 --panel:#ffffff;
@@ -39,7 +38,6 @@ padding:14px 10px 40px;
 }
 
 /* HERO */
-
 .hero{
 background:linear-gradient(135deg,#ffffff 0%,#efefea 100%);
 border:1px solid var(--line);
@@ -109,7 +107,6 @@ color:var(--muted);
 }
 
 /* SEARCH BAR */
-
 .controls{
 margin-bottom:16px;
 }
@@ -140,7 +137,6 @@ align-self:center;
 }
 
 /* GRID */
-
 .grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -148,7 +144,6 @@ gap:18px;
 }
 
 /* CARD */
-
 .card{
 background:#fff;
 border:1px solid var(--line);
@@ -168,6 +163,7 @@ transform:translateY(-3px);
 aspect-ratio:1/1;
 overflow:hidden;
 border-bottom:1px solid var(--line);
+background:#eeeeea;
 }
 
 .card-media img{
@@ -194,8 +190,24 @@ font-size:.9rem;
 color:var(--muted);
 }
 
+.artist-category{
+font-size:.85rem;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
 .artist-blurb{
 font-size:.95rem;
+line-height:1.45;
+}
+
+.artist-blurb p{
+margin:0 0 .75rem;
+}
+
+.artist-blurb p:last-child{
+margin-bottom:0;
 }
 
 .tag-row{
@@ -220,6 +232,7 @@ border-radius:10px;
 padding:8px 12px;
 cursor:pointer;
 margin-top:4px;
+width:max-content;
 }
 
 .details{
@@ -240,13 +253,14 @@ border-left:4px solid #111;
 border-radius:6px;
 font-style:italic;
 margin-top:6px;
+line-height:1.45;
 }
 
 .socials{
 display:flex;
 flex-wrap:wrap;
 gap:6px;
-margin-top:6px;
+margin-top:10px;
 }
 
 .socials a{
@@ -258,10 +272,13 @@ text-decoration:none;
 color:#111;
 }
 
+.socials a:hover{
+background:#111;
+color:#fff;
+}
+
 /* MOBILE */
-
 @media(max-width:900px){
-
 .hero-inner{
 grid-template-columns:1fr;
 }
@@ -273,14 +290,11 @@ grid-template-columns:1fr;
 .grid{
 grid-template-columns:1fr;
 }
-
 }
-
 </style>
 </head>
 
 <body>
-
 <div class="wrap">
 
 <section class="hero">
@@ -289,15 +303,10 @@ grid-template-columns:1fr;
 <div>
 <div class="eyebrow">Harold Street Team</div>
 <h1>Harold Street Players</h1>
-
-<p>
-Artists and bands using Harold Street Pedals in studios,
-basements, rehearsal spaces, and live rigs.
-</p>
+<p>Artists and bands using Harold Street Pedals in studios, basements, rehearsal spaces, and live rigs.</p>
 </div>
 
 <div class="hero-side">
-
 <div class="stat">
 <div class="stat-num" id="artistCount">0</div>
 <div class="stat-label">Artists</div>
@@ -317,18 +326,15 @@ basements, rehearsal spaces, and live rigs.
 <div class="stat-num">Live</div>
 <div class="stat-label">Real boards</div>
 </div>
-
 </div>
+
 </div>
 </section>
 
-
 <section class="controls">
-
 <div class="controls-inner">
-
 <div class="search">
-<input id="searchInput" placeholder="Search artist, band, city or pedal">
+<input id="searchInput" placeholder="Search artist, band, city, genre or pedal">
 </div>
 
 <div class="filter">
@@ -340,164 +346,152 @@ basements, rehearsal spaces, and live rigs.
 <div class="results-count">
 <span id="visibleCount">0</span> visible
 </div>
-
 </div>
 </section>
-
 
 <section class="grid" id="artistGrid"></section>
 
 </div>
 
-
 <script>
-
 const artists = [
-
 {
-name:"Sugar Report",
-band:"Sugar Report",
-city:"Hamilton",
-category:"Rock and Roll, Alternative Rock, Punk Rock",
-image:"images/artist1.jpg",
-blurb:"Formed in the heart of Hamilton, Ontario, Sugar Report quickly established themselves in the local scene by creating songs that offer a view of the world around them. Their music is an honest and unflinching exploration of the human experience—the struggles, the triumphs, and the mundane moments in between. The band transforms raw, personal vulnerability into relatable, sing-along anthems, ensuring that every melody and lyric resonates deeply with the audience. Sugar Report released their debut single, "All In My Head," in June 2025 and are currently gearing up for the release of their debut EP in Spring 2026. With a focus on authentic performance and genuine connection, Sugar Report is ready to bring the next wave of powerful, heartfelt rock to the festival stage.
-
-Sugar Report captures the raw emotion and intricate storytelling of everyday life. Their sound is a dynamic collision of driving, melodic pop-punk reminiscent of The Wonder Years and Red City Radio, infused with the lyrical depth and conversational intimacy of bands like Modern Baseball and The Front Bottoms. The band pivots effortlessly between explosive, anthemic rock and quieter, folk-tinged acoustic moments, drawing heavily on the narrative-driven style found in projects like Aaron West and the Roaring Twenties. Audiences should expect intricate, catchy melodies set against high-energy, guitar-driven urgency.
-",
-pedals:["Sugar Rush","1992","Cosmotone","Doug Ford Hates You"],
-quote:"Working with HSP pedals was such an easy and organic way to help us find the tones we have been hearing in our heads, and bringing them to life on the stage. Trusty, reliable, and friendly service, working with HSP is like having a 5th member of the band.",
-links:{
-instagram:"https://www.instagram.com/sugarreport416?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
-spotify:"https://open.spotify.com/track/6vaOhx6yELETinPlsMp7X7?utm_medium=share&utm_source=linktree",
-facebook:"https://www.facebook.com/sugarreport416",
-linktree:"https://linktr.ee/sugarreport416",
-apple:"https://geo.music.apple.com/us/album/_/1819977001?app=music&at=1000lHKX&ct=linktree_http&i=1819977002&itscg=30200&itsct=lt_m&ls=1&mt=1"
+name: "Sugar Report",
+band: "Sugar Report",
+city: "Hamilton",
+category: "Rock and Roll, Alternative Rock, Punk Rock",
+image: "images/artist1.jpg",
+blurb: [
+"Formed in the heart of Hamilton, Ontario, Sugar Report quickly established themselves in the local scene by creating songs that offer a view of the world around them. Their music is an honest and unflinching exploration of the human experience: the struggles, the triumphs, and the mundane moments in between. The band transforms raw, personal vulnerability into relatable, sing-along anthems, ensuring that every melody and lyric resonates deeply with the audience. Sugar Report released their debut single, \"All In My Head,\" in June 2025 and are currently gearing up for the release of their debut EP in Spring 2026. With a focus on authentic performance and genuine connection, Sugar Report is ready to bring the next wave of powerful, heartfelt rock to the festival stage.",
+"Sugar Report captures the raw emotion and intricate storytelling of everyday life. Their sound is a dynamic collision of driving, melodic pop-punk reminiscent of The Wonder Years and Red City Radio, infused with the lyrical depth and conversational intimacy of bands like Modern Baseball and The Front Bottoms. The band pivots effortlessly between explosive, anthemic rock and quieter, folk-tinged acoustic moments, drawing heavily on the narrative-driven style found in projects like Aaron West and the Roaring Twenties. Audiences should expect intricate, catchy melodies set against high-energy, guitar-driven urgency."
+],
+pedals: ["Sugar Rush", "1992", "Cosmotone", "Doug Ford Hates You"],
+quote: "Working with HSP pedals was such an easy and organic way to help us find the tones we have been hearing in our heads, and bringing them to life on the stage. Trusty, reliable, and friendly service, working with HSP is like having a 5th member of the band.",
+links: {
+instagram: "https://www.instagram.com/sugarreport416?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+spotify: "https://open.spotify.com/track/6vaOhx6yELETinPlsMp7X7?utm_medium=share&utm_source=linktree",
+facebook: "https://www.facebook.com/sugarreport416",
+linktree: "https://linktr.ee/sugarreport416",
+apple: "https://geo.music.apple.com/us/album/_/1819977001?app=music&at=1000lHKX&ct=linktree_http&i=1819977002&itscg=30200&itsct=lt_m&ls=1&mt=1"
 }
 }
-
 ];
 
-const grid=document.getElementById("artistGrid");
-const searchInput=document.getElementById("searchInput");
-const pedalFilter=document.getElementById("pedalFilter");
-const visibleCount=document.getElementById("visibleCount");
-const artistCount=document.getElementById("artistCount");
-const pedalCount=document.getElementById("pedalCount");
+const grid = document.getElementById("artistGrid");
+const searchInput = document.getElementById("searchInput");
+const pedalFilter = document.getElementById("pedalFilter");
+const visibleCount = document.getElementById("visibleCount");
+const artistCount = document.getElementById("artistCount");
+const pedalCount = document.getElementById("pedalCount");
+
+function escapeHtml(value){
+return String(value)
+.replaceAll("&", "&amp;")
+.replaceAll("<", "&lt;")
+.replaceAll(">", "&gt;")
+.replaceAll('"', "&quot;")
+.replaceAll("'", "&#039;");
+}
 
 function uniquePedals(data){
-return [...new Set(data.flatMap(a=>a.pedals))];
+return [...new Set(data.flatMap(a => a.pedals))];
 }
 
 function buildFilter(){
+const pedals = uniquePedals(artists);
+pedalCount.textContent = pedals.length;
+artistCount.textContent = artists.length;
 
-const pedals=uniquePedals(artists);
-
-pedalCount.textContent=pedals.length;
-artistCount.textContent=artists.length;
-
-pedals.forEach(p=>{
-
-const opt=document.createElement("option");
-opt.value=p.toLowerCase();
-opt.textContent=p;
+pedals.forEach(p => {
+const opt = document.createElement("option");
+opt.value = p.toLowerCase();
+opt.textContent = p;
 pedalFilter.appendChild(opt);
-
 });
-
 }
 
 function render(){
+grid.innerHTML = artists.map((artist, i) => {
+const blurbHtml = artist.blurb.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("");
+const searchText = [
+artist.name,
+artist.band,
+artist.city,
+artist.category,
+artist.blurb.join(" "),
+artist.pedals.join(" ")
+].join(" ").toLowerCase();
 
-grid.innerHTML=artists.map((artist,i)=>`
-
-<article class="card"
-data-search="${(artist.name+artist.band+artist.city+artist.pedals.join(" ")).toLowerCase()}"
-data-pedals="${artist.pedals.join("|").toLowerCase()}">
-
+return `
+<article class="card" data-search="${escapeHtml(searchText)}" data-pedals="${escapeHtml(artist.pedals.join("|").toLowerCase())}">
 <div class="card-media">
-<img src="${artist.image}">
+<img src="${escapeHtml(artist.image)}" alt="${escapeHtml(artist.name)}" loading="lazy">
 </div>
 
 <div class="card-body">
-
-<h2 class="artist-name">${artist.name}</h2>
-<div class="artist-meta">${artist.band} · ${artist.city}</div>
-
-<div class="artist-blurb">${artist.blurb}</div>
+<h2 class="artist-name">${escapeHtml(artist.name)}</h2>
+<div class="artist-meta">${escapeHtml(artist.band)} · ${escapeHtml(artist.city)}</div>
+<div class="artist-category">${escapeHtml(artist.category)}</div>
+<div class="artist-blurb">${blurbHtml}</div>
 
 <div class="tag-row">
-${artist.pedals.map(p=>`<span class="tag">${p}</span>`).join("")}
+${artist.pedals.map(p => `<span class="tag">${escapeHtml(p)}</span>`).join("")}
 </div>
 
-<button class="btn" onclick="toggle(${i})">More</button>
+<button class="btn" type="button" data-toggle="${i}" aria-expanded="false">More</button>
 
 <div class="details" id="d${i}">
-
-<div class="quote">"${artist.quote}"</div>
+<div class="quote">“${escapeHtml(artist.quote)}”</div>
 
 <div class="socials">
-${Object.entries(artist.links).map(([k,v])=>`<a href="${v}" target="_blank">${k}</a>`).join("")}
+${Object.entries(artist.links).map(([k, v]) => `<a href="${escapeHtml(v)}" target="_blank" rel="noopener noreferrer">${escapeHtml(k)}</a>`).join("")}
 </div>
-
 </div>
-
 </div>
-
-</article>
-
-`).join("");
+</article>`;
+}).join("");
 
 updateCount();
-
 }
 
-function toggle(i){
-
-const card=document.getElementById("d"+i).parentElement.parentElement;
-card.classList.toggle("open");
-
+function toggleCard(button){
+const card = button.closest(".card");
+const isOpen = card.classList.toggle("open");
+button.textContent = isOpen ? "Less" : "More";
+button.setAttribute("aria-expanded", String(isOpen));
 }
 
 function filter(){
+const q = searchInput.value.trim().toLowerCase();
+const pedal = pedalFilter.value;
+let shown = 0;
 
-const q=searchInput.value.toLowerCase();
-const pedal=pedalFilter.value;
-
-let shown=0;
-
-document.querySelectorAll(".card").forEach(c=>{
-
-const search=c.dataset.search;
-const pedals=c.dataset.pedals;
-
-const okSearch=!q||search.includes(q);
-const okPedal=pedal==="all"||pedals.includes(pedal);
-
-const show=okSearch&&okPedal;
-
-c.style.display=show?"":"none";
-
+document.querySelectorAll(".card").forEach(c => {
+const search = c.dataset.search;
+const pedals = c.dataset.pedals;
+const okSearch = !q || search.includes(q);
+const okPedal = pedal === "all" || pedals.includes(pedal);
+const show = okSearch && okPedal;
+c.style.display = show ? "" : "none";
 if(show) shown++;
-
 });
 
-visibleCount.textContent=shown;
-
+visibleCount.textContent = shown;
 }
 
 function updateCount(){
-
-visibleCount.textContent=document.querySelectorAll(".card").length;
-
+visibleCount.textContent = document.querySelectorAll(".card").length;
 }
 
 buildFilter();
 render();
 
-searchInput.addEventListener("input",filter);
-pedalFilter.addEventListener("change",filter);
-
+searchInput.addEventListener("input", filter);
+pedalFilter.addEventListener("change", filter);
+grid.addEventListener("click", event => {
+const button = event.target.closest("button[data-toggle]");
+if(button) toggleCard(button);
+});
 </script>
-
 </body>
 </html>
